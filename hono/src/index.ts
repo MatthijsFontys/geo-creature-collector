@@ -1,75 +1,20 @@
-import axios, { HttpStatusCode } from "axios";
-import { ServerWebSocket } from "bun";
-import { createBunWebSocket } from "hono/bun";
+import axios from "axios";
+import { WebSocketHandler } from "bun";
 import { create } from "xmlbuilder2";
-import { db } from "./db/db";
-import { creaturesCaughtTable } from "./db/schema";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { getUsersCreatures, postAttemptCatch } from "./validation/zod-api-spec";
+import { AppSetup } from "./setup";
+import { BunWebSocketData } from "hono/dist/types/adapter/bun/websocket";
 
-const app = new OpenAPIHono();
+let websocket: WebSocketHandler<BunWebSocketData>;
+const app = new OpenAPIHono().basePath("/api/v1");
+const setup = new AppSetup(app);
+setup
+  .addSimpleHeartbeat()
+  .routeControllers()
+  .addWebsockets((ws) => (websocket = ws))
+  .addOpenApiSpec();
 
-// Default get
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
-
-app.openapi(postAttemptCatch, async (c) => {
-  const body = await c.req.json();
-  const creatureId = body.creatureId;
-  const coordinates = body.coordinates;
-
-  const settings = {
-    auth: {
-      username: "backend",
-      password: "l0Ocal-dev",
-    },
-    params: {
-      service: "WFS",
-      version: "2.0.0",
-      outputformat: "application/json",
-      request: "GetFeature",
-      typeNames: "app:creature",
-      storedquery_id: "getCreaturesForPlayer",
-      playerLocation: coordinates.join(","),
-    },
-  };
-  const creaturesInRange = await axios.get(
-    "http://localhost:9001/deegree/services/CreatureWfs",
-    settings
-  );
-
-  const creature = creaturesInRange.data.features?.find(
-    (x: any) => x.id === creatureId
-  );
-
-  const inRange = !!creature;
-
-  if (inRange) {
-    await db.insert(creaturesCaughtTable).values({
-      species: creature.properties.species,
-      is_shiny: creature.properties.is_shiny,
-      creature_id: creatureId,
-    });
-    return c.json(
-      {
-        code: HttpStatusCode.Created,
-        message: "Pokemon Caught!",
-        isShiny: creature.properties.is_shiny,
-        species: creature.properties.species,
-      },
-      HttpStatusCode.Created
-    );
-  } else
-    return c.json(
-      {
-        code: HttpStatusCode.BadRequest,
-        message: "No valid pokemon or \nNot in range to catch pokemon",
-      },
-      HttpStatusCode.BadRequest
-    );
-});
-
+//#region WILL MOVE LATER
 // Call to deegree wfs-t
 // TODO: this should be a websocket mediation, not an endpoint
 // TODO: extend the existing builder, factory pattern style
@@ -117,46 +62,9 @@ app.get("/deegree", (c) => {
   return c.text(transactionXml);
 });
 
-// Websockets
-const { upgradeWebSocket, websocket } = createBunWebSocket<ServerWebSocket>();
-
-app.get(
-  "/ws",
-  upgradeWebSocket(() => {
-    return {
-      onMessage: (event, ws) => {
-        console.log(event.data);
-        ws.send("Heya to you too");
-      },
-    };
-  })
-);
-
-/* GET: /creatures */
-app.openapi(getUsersCreatures, async (c) => {
-  const creatures = await db.select().from(creaturesCaughtTable);
-
-  const creatureViewModels = creatures.map((x) => {
-    return {
-      isShiny: x.is_shiny,
-      creatureId: x.creature_id,
-      species: x.species,
-    };
-  });
-
-  return c.json(creatureViewModels, HttpStatusCode.Ok);
-});
-
-// API spec
-app.doc("/spec", {
-  openapi: "3.0.0",
-  info: {
-    version: "0.0.1",
-    title: "Creature Collector",
-  },
-});
+//#endregion
 
 export default {
   fetch: app.fetch,
-  websocket,
+  websocket: websocket!,
 };

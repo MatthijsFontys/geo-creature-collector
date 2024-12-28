@@ -25,7 +25,7 @@ export const getUsersCreatures = createRoute({
 // attempt catch
 export const postAttemptCatch = createRoute({
   method: "post",
-  path: "/attempt/catch",
+  path: "/catch",
   responses: {
     201: /* CREATED */ {
       content: {
