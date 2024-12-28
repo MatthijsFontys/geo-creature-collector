@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: Maven WAR Plugin 3.4.0
+Build-Jdk-Spec: 11
+Implementation-Title: deegree-webservices
+Implementation-Version: 3.5.8
+deegree-build-artifactId: deegree-webservices
+deegree-build-by: jenkins
+deegree-build-date: 2024-06-10T22:22:47Z
+deegree-build-rev: 5d7247e9880c322adb45fc785dfb6afa99788e1a
+

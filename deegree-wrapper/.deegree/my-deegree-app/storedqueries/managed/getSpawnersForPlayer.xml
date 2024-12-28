@@ -1,0 +1,23 @@
+<StoredQueryDefinition id="getSpawnersForPlayer"
+  xmlns="http://www.opengis.net/wfs/2.0"
+  xmlns:fes="http://www.opengis.net/fes/2.0"
+  xmlns:gml="http://www.opengis.net/gml/3.2">
+  <Title>getSpawnersForPlayer</Title>
+  <Abstract>Returns all spawners that contain the player location</Abstract>
+  <Parameter name="playerLocation" type="string">
+    <Abstract>The player location as a comma seperated string (x, y) a.k.a. (lon, lat)</Abstract>
+  </Parameter>
+  <QueryExpressionText returnFeatureTypes="app:Spawners"
+   language="urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression">
+    <Query typeNames="app:Spawners">
+      <Filter xmlns="http://www.opengis.net/fes/2.0">
+	    <Contains>
+		  <ValueReference>geometry</ValueReference>
+          <gml:Point srsName="EPSG:28992">
+            <gml:coordinates>${playerLocation}</gml:coordinates>
+          </gml:Point>
+		</Contains>
+      </Filter>
+    </Query>
+  </QueryExpressionText>
+</StoredQueryDefinition>

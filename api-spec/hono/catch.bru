@@ -1,0 +1,18 @@
+meta {
+  name: catch
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/attempt/catch/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "creatureId": "APP_CREATURES__SPAWNED_1",
+    "coordinates": [171316.4236,385841.7762285521]
+  }
+}

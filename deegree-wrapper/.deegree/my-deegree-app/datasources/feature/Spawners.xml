@@ -1,0 +1,20 @@
+<ShapeFeatureStore xmlns="http://www.deegree.org/datasource/feature/shape"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.deegree.org/datasource/feature/shape ./deegree_data/schemas/shape.xsd">
+
+  <!-- [0...1] CRS for storing geometries -->
+  <StorageCRS>EPSG:28992</StorageCRS>
+
+  <!-- [0...1] Local name of the feature type (defaults to base name of shape file) -->
+  <FeatureTypeName>Spawners</FeatureTypeName>
+
+
+
+  <!-- [1] Name of the shape file -->
+  <File>./shapefiles/spawners/spawners.shp</File>
+
+
+  <!-- [0...1] Should an index for alphanumeric fields be generated -->
+  <GenerateAlphanumericIndexes>false</GenerateAlphanumericIndexes>
+
+</ShapeFeatureStore>

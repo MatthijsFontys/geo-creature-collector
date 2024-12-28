@@ -1,0 +1,26 @@
+<StoredQueryDefinition id="getCreaturesForPlayer"
+  xmlns="http://www.opengis.net/wfs/2.0"
+  xmlns:fes="http://www.opengis.net/fes/2.0"
+  xmlns:gml="http://www.opengis.net/gml/3.2">
+  <Title>getCreaturesForPlayer</Title>
+  <Abstract>Returns all creatures that are in FOV radius of the player location</Abstract>
+  <Parameter name="playerLocation" type="string">
+    <Abstract>The player location as a comma seperated string (x, y) a.k.a. (lon, lat)</Abstract>
+  </Parameter>
+  <QueryExpressionText returnFeatureTypes="app:creatures__spawned"
+   language="urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression">
+    <Query typeNames="app:creatures__spawned">
+	  <Filter xmlns="http://www.opengis.net/fes/2.0">
+		<DWithin>
+		  <ValueReference>geometry</ValueReference>
+			<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2" srsName="EPSG:28992">
+				<gml:coordinates>${playerLocation}</gml:coordinates>
+			</gml:Point>
+			<fes:Distance uom="http://www.opengis.net/def/uom/OGC/1.0/meter">100</fes:Distance> <!-- Explicit meter -->
+		</DWithin>
+	  </Filter>
+    </Query>
+  </QueryExpressionText>
+</StoredQueryDefinition>
+
+

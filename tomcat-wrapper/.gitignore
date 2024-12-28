@@ -1,0 +1,22 @@
+## TOMCAT
+
+# Logs
+/apache-tomcat*/logs/**
+
+# Work
+/apache-tomcat*/work/**
+
+# Temp
+/apache-tomcat*/temp/**
+
+# Passwords
+tomcat-users.xml
+
+# Keep the gitkeep file for folders that have their contents ignored
+!.gitkeep
+
+
+
+
+
+

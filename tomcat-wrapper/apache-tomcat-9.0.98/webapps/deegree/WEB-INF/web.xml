@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         id="WebApp_ID" version="3.1">
+  <display-name>deegree 3 OGC services console + generic client</display-name>
+
+  <context-param>
+    <param-name>javax.faces.PROJECT_STAGE</param-name>
+    <param-value>Development</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>primefaces.THEME</param-name>
+    <param-value>nova-light</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>primefaces.UPLOADER</param-name>
+    <param-value>native</param-value>
+  </context-param>
+<!--
+  <filter>
+    <filter-name>Upload Filter</filter-name>
+    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>Upload Filter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+  </filter-mapping>
+-->
+  <listener>
+    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.jsf</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.xhtml</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>services</servlet-name>
+    <servlet-class>org.deegree.services.controller.OGCFrontController</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>resources</servlet-name>
+    <servlet-class>org.deegree.services.resources.ResourcesServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>config</servlet-name>
+    <servlet-class>org.deegree.services.config.servlet.ConfigServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>services</servlet-name>
+    <url-pattern>/services</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>services</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>resources</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>config</servlet-name>
+    <url-pattern>/config/*</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>index.xhtml</welcome-file>
+  </welcome-file-list>
+
+  <!-- REST API is protected by API key by default. -->
+  <!--
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Configuration</web-resource-name>
+      <url-pattern>/config/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>deegree</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>deegree web configuration API</realm-name>
+  </login-config>
+
+  <security-role>
+    <description>deegree administrator role</description>
+    <role-name>deegree</role-name>
+  </security-role>
+  -->
+
+  <!-- http basic auth enable -->
+  <!-- Define a security constraint on this application -->
+  <!-- User and role must be added to tomcat-users.xml -->
+ 
+  <security-constraint> 
+	<web-resource-collection>
+		<web-resource-name>Deegree services</web-resource-name>
+		<url-pattern>/services/*</url-pattern>
+    </web-resource-collection> 
+	<auth-constraint> 
+		<role-name>deegree</role-name> 
+	</auth-constraint> 
+	</security-constraint>
+	
+	<login-config> 
+		<auth-method>BASIC</auth-method> 
+		<realm-name>Tomcat Manager Application</realm-name> 
+	</login-config> 
+	<security-role> 
+		<description>
+			The role that is required to use deegree
+		</description> <role-name>demoadmin</role-name> 
+	</security-role> 
+  <!-- end -->
+
+  <error-page>
+    <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+    <location>/index.jsf</location>
+  </error-page>
+
+</web-app>

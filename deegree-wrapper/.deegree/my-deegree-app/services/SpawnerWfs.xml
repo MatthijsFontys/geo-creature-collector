@@ -1,0 +1,16 @@
+<deegreeWFS
+  xmlns="http://www.deegree.org/services/wfs"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.deegree.org/services/wfs ./deegree_data/schemas/wfs_configuration.xsd">
+  
+  <FeatureStoreId>Spawners</FeatureStoreId>
+  
+  <QueryCRS>EPSG:28992</QueryCRS>
+  
+  <GeoJSONFormat allowOtherCrsThanWGS84="true">
+	<MimeType>application/json</MimeType>
+	<MimeType>application/geo+json</MimeType>
+  </GeoJSONFormat>
+  
+
+</deegreeWFS>

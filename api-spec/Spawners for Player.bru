@@ -1,0 +1,22 @@
+meta {
+  name: Spawners for Player
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:9001/deegree/services/SpawnerWfs?service=WFS&version=2.0.0&outputformat=application/geo%2Bjson&request=GetFeature&typeNames=app:Spawners&storedquery_id=getSpawnersForPlayer&playerLocation=170811.8339,384826.2638
+  body: none
+  auth: basic
+}
+
+query {
+  service: WFS
+  version: 2.0.0
+  outputformat: application/geo%2Bjson
+  request: GetFeature
+  typeNames: app:Spawners
+  storedquery_id: getSpawnersForPlayer
+  playerLocation: 170811.8339,384826.2638
+  ~playerLocation: <gml:Point srsName="EPSG:28992"><pos>170811.8339 384826.2638</pos></gml:Point>
+}

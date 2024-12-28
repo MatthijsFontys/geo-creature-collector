@@ -1,0 +1,11 @@
+<SQLFeatureStore xmlns="http://www.deegree.org/datasource/feature/sql" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.deegree.org/datasource/feature/sql
+  ./deegree_data/schemas/sql.xsd">
+  <JDBCConnId>postgis-local</JDBCConnId>
+  
+  <StorageCRS srid="EPSG:28992" />
+
+  <!-- Map table creature to Feature Type -->
+  <FeatureTypeMapping table="creatures__spawned" />
+
+</SQLFeatureStore>
