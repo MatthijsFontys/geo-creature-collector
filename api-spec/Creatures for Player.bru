@@ -7,7 +7,7 @@ meta {
 get {
   url: http://localhost:9001/deegree/services/CreatureWfs?service=WFS&version=2.0.0&outputformat=application/geo%2Bjson&request=GetFeature&typeNames=app:creatures__spawned&playerLocation=171316.4236,385841.7762285521&storedquery_id=getCreaturesForPlayer
   body: none
-  auth: none
+  auth: basic
 }
 
 query {
@@ -18,4 +18,9 @@ query {
   typeNames: app:creatures__spawned
   playerLocation: 171316.4236,385841.7762285521
   storedquery_id: getCreaturesForPlayer
+}
+
+auth:basic {
+  username: bruno
+  password: l0Ocal-dev
 }

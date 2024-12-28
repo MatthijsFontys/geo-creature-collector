@@ -1,12 +1,11 @@
 import axios, { HttpStatusCode } from "axios";
-import { ServerWebSocket, version } from "bun";
-import { Hono } from "hono";
+import { ServerWebSocket } from "bun";
 import { createBunWebSocket } from "hono/bun";
 import { create } from "xmlbuilder2";
 import { db } from "./db/db";
 import { creaturesCaughtTable } from "./db/schema";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { getUsersCreatures } from "./validation/zod-api-spec";
+import { getUsersCreatures, postAttemptCatch } from "./validation/zod-api-spec";
 
 const app = new OpenAPIHono();
 
@@ -15,7 +14,7 @@ app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
-app.post("/attempt/catch", async (c) => {
+app.openapi(postAttemptCatch, async (c) => {
   const body = await c.req.json();
   const creatureId = body.creatureId;
   const coordinates = body.coordinates;
@@ -47,16 +46,28 @@ app.post("/attempt/catch", async (c) => {
   const inRange = !!creature;
 
   if (inRange) {
-    console.log("################");
-    console.log(creature);
     await db.insert(creaturesCaughtTable).values({
       species: creature.properties.species,
       is_shiny: creature.properties.is_shiny,
       creature_id: creatureId,
     });
-    return c.json("Pokemon caught", 201);
+    return c.json(
+      {
+        code: HttpStatusCode.Created,
+        message: "Pokemon Caught!",
+        isShiny: creature.properties.is_shiny,
+        species: creature.properties.species,
+      },
+      HttpStatusCode.Created
+    );
   } else
-    return c.json("No valid pokemon or \nNot in range to catch pokemon", 400);
+    return c.json(
+      {
+        code: HttpStatusCode.BadRequest,
+        message: "No valid pokemon or \nNot in range to catch pokemon",
+      },
+      HttpStatusCode.BadRequest
+    );
 });
 
 // Call to deegree wfs-t

@@ -7,7 +7,7 @@ meta {
 get {
   url: http://localhost:9001/deegree/services/CreatureWfs?service=WFS&version=2.0.0&outputformat=application/geo%2Bjson&request=GetFeature&typeNames=app:creatures__spawned
   body: none
-  auth: none
+  auth: basic
 }
 
 query {
@@ -16,4 +16,9 @@ query {
   outputformat: application/geo%2Bjson
   request: GetFeature
   typeNames: app:creatures__spawned
+}
+
+auth:basic {
+  username: bruno
+  password: l0Ocal-dev
 }

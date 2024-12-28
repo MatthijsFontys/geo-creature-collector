@@ -7,13 +7,18 @@ meta {
 post {
   url: http://localhost:9001/deegree/services/CreatureWfs?service=WFS&version=2.0.0&request=Transaction
   body: xml
-  auth: none
+  auth: basic
 }
 
 query {
   service: WFS
   version: 2.0.0
   request: Transaction
+}
+
+auth:basic {
+  username: bruno
+  password: l0Ocal-dev
 }
 
 body:xml {

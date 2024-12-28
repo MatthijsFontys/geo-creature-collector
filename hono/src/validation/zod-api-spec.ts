@@ -1,19 +1,15 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { CatchSuccessSchema, CreatureViewSchema } from "./zod-api-schemas";
-import { HttpStatusCode } from "axios";
-
-/* Statusses used in this file, that can be used as properties */
-const STATUS = {
-  OK: HttpStatusCode.Ok as number,
-  CREATED: HttpStatusCode.Created as number,
-  BAD_REQUEST: HttpStatusCode.BadRequest as number,
-};
+import {
+  CatchSuccessSchema,
+  CreatureViewSchema,
+  ErrorCodeSchema,
+} from "./zod-api-schemas";
 
 export const getUsersCreatures = createRoute({
   method: "get",
   path: "/creatures",
   responses: {
-    [STATUS.OK]: {
+    200: /* OK */ {
       content: {
         "application/json": {
           schema: z.array(CreatureViewSchema).openapi({
@@ -31,7 +27,7 @@ export const postAttemptCatch = createRoute({
   method: "post",
   path: "/attempt/catch",
   responses: {
-    [STATUS.CREATED]: {
+    201: /* CREATED */ {
       content: {
         "application/json": {
           schema: CatchSuccessSchema,
@@ -39,10 +35,10 @@ export const postAttemptCatch = createRoute({
       },
       description: "The pokemon was caught successfully",
     },
-    [STATUS.BAD_REQUEST]: {
+    400: /* BAD REQUEST */ {
       content: {
-        "text/plain": {
-          schema: z.string().nonempty(),
+        "application/json": {
+          schema: ErrorCodeSchema,
         },
       },
       description:

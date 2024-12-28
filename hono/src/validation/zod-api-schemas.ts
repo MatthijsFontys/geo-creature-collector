@@ -22,4 +22,15 @@ export const CreatureViewSchema = z.object({
   }),
 });
 
-export const CatchSuccessSchema = z.object({});
+export const ErrorCodeSchema = z.object({
+  code: z.number().min(400).max(511),
+  message: z.string().nonempty(),
+  details: z.optional(z.string().nonempty()),
+});
+
+export const CatchSuccessSchema = z.object({
+  code: z.number().min(200).max(226),
+  message: z.string().nonempty(),
+  species: z.string().nonempty(),
+  isShiny: z.boolean(),
+});
