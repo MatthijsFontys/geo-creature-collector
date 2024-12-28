@@ -2,6 +2,7 @@
 
 # Logs
 /apache-tomcat*/logs/**
+/apache-tomcat*/bin/logs/**
 
 # Work
 /apache-tomcat*/work/**
