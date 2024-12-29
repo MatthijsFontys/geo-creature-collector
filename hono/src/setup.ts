@@ -14,7 +14,6 @@ export class AppSetup {
 
   provideSimpleMiddleware(): this {
     this._app.use(logger()).use(trimTrailingSlash());
-    this._app.use(emitter());
     return this;
   }
 
@@ -31,9 +30,9 @@ export class AppSetup {
     return this;
   }
 
-  addWebsockets(tabFn: (ws: WebSocketHandler<BunWebSocketData>) => void): this {
+  addWebsockets(tapFn: (ws: WebSocketHandler<BunWebSocketData>) => void): this {
     const { upgradeWebSocket, websocket } = createBunWebSocket();
-    tabFn(websocket);
+    tapFn(websocket);
     this._app.get(
       "/ws",
       upgradeWebSocket(() => {
