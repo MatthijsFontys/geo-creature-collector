@@ -12,6 +12,7 @@ const setup = new AppSetup(app);
 setup
   .provideSimpleMiddleware()
   .addSimpleHeartbeat()
+  .setupMediator()
   .routeControllers()
   .addWebsockets((ws) => (websocket = ws))
   .addOpenApiSpec();

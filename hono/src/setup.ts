@@ -5,9 +5,10 @@ import { createBunWebSocket } from "hono/bun";
 import { WebSocketHandler } from "bun";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { logger } from "hono/logger";
-import { emitter } from "@hono/event-emitter";
 import { AppEnv } from "./middleware/app-environment";
 import inventoryController from "./controllers/inventory/inventory.controller";
+import { emitter } from "@hono/event-emitter";
+import { availableHandlers } from "./middleware/mediator/mediator-middleware";
 
 export class AppSetup {
   constructor(private readonly _app: OpenAPIHono<AppEnv>) {}
@@ -21,6 +22,11 @@ export class AppSetup {
     this._app.get("/", (c) => {
       return c.text("🟢 The Hono powered API is: AVAILABLE 🔥");
     });
+    return this;
+  }
+
+  setupMediator(): this {
+    this._app.use(emitter(availableHandlers, { maxHandlers: 1 }));
     return this;
   }
 
