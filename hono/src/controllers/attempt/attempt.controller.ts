@@ -1,8 +1,8 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import axios, { HttpStatusCode } from "axios";
-import { creaturesCaughtTable } from "../db/schema";
-import { db } from "../db/db";
-import { postAttemptCatch } from "../validation/zod-api-spec";
+import { creaturesCaughtTable } from "../../db/schema";
+import { db } from "../../db/db";
+import { postAttemptCatch } from "./attempt.routes";
 
 const controller = new OpenAPIHono();
 
@@ -27,6 +27,7 @@ controller.openapi(postAttemptCatch, async (c) => {
       playerLocation: coordinates.join(","),
     },
   };
+
   const creaturesInRange = await axios.get(
     "http://localhost:9001/deegree/services/CreatureWfs",
     settings

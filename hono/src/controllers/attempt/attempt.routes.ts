@@ -1,28 +1,8 @@
-import { createRoute, z } from "@hono/zod-openapi";
-import {
-  CatchSuccessSchema,
-  CreatureViewSchema,
-  ErrorCodeSchema,
-} from "./zod-api-schemas";
+import { createRoute } from "@hono/zod-openapi";
+import { CatchSuccessSchema } from "./attempt.schemas";
+import { ErrorCodeSchema } from "../shared/shared.schemas";
 
-export const getUsersCreatures = createRoute({
-  method: "get",
-  path: "/creatures",
-  responses: {
-    200: /* OK */ {
-      content: {
-        "application/json": {
-          schema: z.array(CreatureViewSchema).openapi({
-            type: "array",
-          }),
-        },
-      },
-      description: "Get all the creatures owned by the user",
-    },
-  },
-});
-
-// attempt catch
+//#region POST: /catch
 export const postAttemptCatch = createRoute({
   method: "post",
   path: "/catch",
@@ -46,3 +26,4 @@ export const postAttemptCatch = createRoute({
     },
   },
 });
+//#endregion

@@ -4,11 +4,13 @@ import { create } from "xmlbuilder2";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { AppSetup } from "./setup";
 import { BunWebSocketData } from "hono/dist/types/adapter/bun/websocket";
+import { AppEnv } from "./middleware/app-environment";
 
 let websocket: WebSocketHandler<BunWebSocketData>;
-const app = new OpenAPIHono().basePath("/api/v1");
+const app = new OpenAPIHono<AppEnv>().basePath("/api/v1");
 const setup = new AppSetup(app);
 setup
+  .provideSimpleMiddleware()
   .addSimpleHeartbeat()
   .routeControllers()
   .addWebsockets((ws) => (websocket = ws))

@@ -1,8 +1,8 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { getUsersCreatures } from "../validation/zod-api-spec";
-import { db } from "../db/db";
-import { creaturesCaughtTable } from "../db/schema";
 import { HttpStatusCode } from "axios";
+import { db } from "../../db/db";
+import { creaturesCaughtTable } from "../../db/schema";
+import { getUsersCreatures } from "./inventory.routes";
 
 const controller = new OpenAPIHono();
 

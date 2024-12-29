@@ -1,12 +1,22 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import attemptController from "./controllers/attempt-controller";
+import attemptController from "./controllers/attempt/attempt.controller";
 import { BunWebSocketData } from "hono/dist/types/adapter/bun/websocket";
 import { createBunWebSocket } from "hono/bun";
 import { WebSocketHandler } from "bun";
-import inventoryController from "./controllers/inventory-controller";
+import { trimTrailingSlash } from "hono/trailing-slash";
+import { logger } from "hono/logger";
+import { emitter } from "@hono/event-emitter";
+import { AppEnv } from "./middleware/app-environment";
+import inventoryController from "./controllers/inventory/inventory.controller";
 
 export class AppSetup {
-  constructor(private readonly _app: OpenAPIHono) {}
+  constructor(private readonly _app: OpenAPIHono<AppEnv>) {}
+
+  provideSimpleMiddleware(): this {
+    this._app.use(logger()).use(trimTrailingSlash());
+    this._app.use(emitter());
+    return this;
+  }
 
   addSimpleHeartbeat(): this {
     this._app.get("/", (c) => {
