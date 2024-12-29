@@ -21,6 +21,7 @@ export interface CatchCreatureQuery extends HasResponse<CatchCreatureResponse> {
 }
 //#endregion
 
+// Collections to export all events / handlers
 export type AttemptEvents = {
   "attempt:catch": CatchCreatureQuery;
 };

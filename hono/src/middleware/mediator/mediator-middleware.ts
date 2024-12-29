@@ -1,14 +1,20 @@
 import { Context } from "hono";
-import { AttemptEvents } from "../../controllers/attempt/attempt.events";
-import { InventoryEvents } from "../../controllers/inventory/inventory.events";
+import {
+  AttemptEvents,
+  attemptHandlers,
+} from "../../controllers/attempt/attempt.events";
+import {
+  InventoryEvents,
+  inventoryHandlers,
+} from "../../controllers/inventory/inventory.events";
 import { AppEnv, AppEnvWeak } from "../app-environment";
 import { defineHandlers, Emitter } from "@hono/event-emitter";
-import { handleCatchAttempt } from "../../controllers/attempt/event-handlers/attempt-catch-handler";
 
 export type AvailableEvents = AttemptEvents & InventoryEvents;
 
 export const availableHandlers = defineHandlers<AvailableEvents, AppEnvWeak>({
-  "attempt:catch": [handleCatchAttempt],
+  ...attemptHandlers,
+  ...inventoryHandlers,
 });
 
 //#region Supply mediator result
