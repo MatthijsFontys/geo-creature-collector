@@ -4,6 +4,7 @@ import { UnparsedXML } from "./base.parser";
 
 export class UnparsedTransactionResponse extends UnparsedXML<TransactionResponse> {
   parse(): TransactionResponse {
+    // TODO: check if there is a workaround for this namespace stuff
     const [select, select1] = this.setNamespaces({
       wfs: "http://www.opengis.net/wfs/2.0",
       fes: "http://www.opengis.net/fes/2.0",
@@ -16,6 +17,7 @@ export class UnparsedTransactionResponse extends UnparsedXML<TransactionResponse
       ["totalDeleted", -1],
     ]);
 
+    // TODO: check if I can use the summary node instead, not important for this use case, but can improve performance in large xmls
     const summaryPath = "//wfs:TransactionSummary";
 
     transactionCounts.forEach((_, q) => {

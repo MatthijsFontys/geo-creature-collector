@@ -12,8 +12,8 @@ const _handleCatchAttempt = async (
 ) => {
   const settings = {
     auth: {
-      username: "backend",
-      password: "l0Ocal-dev",
+      username: process.env.GEO_USERNAME ?? "",
+      password: process.env.GEO_PASSWORD ?? "",
     },
     params: {
       service: "WFS",
@@ -25,11 +25,8 @@ const _handleCatchAttempt = async (
       playerLocation: payload.coordinates.join(","),
     },
   };
-
-  const creaturesInRange = await axios.get(
-    "http://localhost:9001/deegree/services/CreatureWfs",
-    settings
-  );
+  const baseUrl = process.env.GEO_SERVICES_URL ?? "";
+  const creaturesInRange = await axios.get(`${baseUrl}/CreatureWfs`, settings);
 
   const creature = creaturesInRange.data.features?.find(
     (x: any) => x.id === payload.creatureId
