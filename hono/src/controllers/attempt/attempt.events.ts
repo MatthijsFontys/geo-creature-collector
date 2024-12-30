@@ -2,17 +2,10 @@ import { HasResponse } from "../../middleware/mediator/mediator-middleware";
 import { handleCatchAttempt } from "./event-handlers/attempt-catch-handler";
 import { Position } from "geojson";
 
-// TODO: this obviously should not be here, but with mapping and the deegree api we will deal later
-export interface Creature {
-  properties: {
-    is_shiny: boolean;
-    species: string;
-  };
-}
-
 //#region Catch creature
 export interface CatchCreatureResponse {
-  creature: Creature;
+  species?: string; // Only set if inRange is true
+  isShiny?: boolean; // Only set if inRange is true
   inRange: boolean;
 }
 

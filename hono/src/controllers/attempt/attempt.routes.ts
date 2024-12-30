@@ -1,11 +1,20 @@
 import { createRoute } from "@hono/zod-openapi";
-import { CatchSuccessSchema } from "./attempt.schemas";
+import { CatchBodySchema, CatchSuccessSchema } from "./attempt.schemas";
 import { ErrorCodeSchema } from "../shared/shared.schemas";
 
 //#region POST: /catch
 export const postAttemptCatch = createRoute({
   method: "post",
   path: "/catch",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: CatchBodySchema,
+        },
+      },
+    },
+  },
   responses: {
     201: /* CREATED */ {
       content: {

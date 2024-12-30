@@ -1,32 +1,20 @@
-import axios from "axios";
-import { CatchCreatureQuery } from "../attempt.events";
+import { CatchCreatureQuery, CatchCreatureResponse } from "../attempt.events";
 import { db } from "../../../db/db";
 import { creaturesCaughtTable } from "../../../db/db.schema";
 import { Context } from "hono";
 import { AppEnv } from "../../../middleware/app-environment";
 import { toWeakEnv } from "../../../middleware/mediator/weak-env-handling";
+import { DeegreeQueryClient } from "../../../services/deegree-services/deegree-query-client";
 
 const _handleCatchAttempt = async (
   _c: Context<AppEnv>,
   payload: CatchCreatureQuery
 ) => {
-  const settings = {
-    auth: {
-      username: process.env.GEO_USERNAME ?? "",
-      password: process.env.GEO_PASSWORD ?? "",
-    },
-    params: {
-      service: "WFS",
-      version: "2.0.0",
-      outputformat: "application/json",
-      request: "GetFeature",
-      typeNames: "app:creature",
-      storedquery_id: "getCreaturesForPlayer",
-      playerLocation: payload.coordinates.join(","),
-    },
-  };
-  const baseUrl = process.env.GEO_SERVICES_URL ?? "";
-  const creaturesInRange = await axios.get(`${baseUrl}/CreatureWfs`, settings);
+  const deegree = new DeegreeQueryClient();
+  const creaturesInRange = await deegree.getCreaturesForPlayer(
+    payload.coordinates,
+    "_somePlayerId"
+  );
 
   const creature = creaturesInRange.data.features?.find(
     (x: any) => x.id === payload.creatureId
@@ -34,16 +22,21 @@ const _handleCatchAttempt = async (
 
   const inRange = !!creature;
 
-  await db.insert(creaturesCaughtTable).values({
-    species: creature.properties.species,
-    is_shiny: creature.properties.is_shiny,
-    creature_id: payload.creatureId,
-  });
+  if (inRange) {
+    await db.insert(creaturesCaughtTable).values({
+      species: creature.properties.species,
+      is_shiny: creature.properties.is_shiny,
+      creature_id: payload.creatureId,
+    });
+  }
 
-  payload.response = {
-    creature,
+  const response: CatchCreatureResponse = {
+    isShiny: creature?.properties.is_shiny,
+    species: creature?.properties.species,
     inRange,
   };
+
+  payload.response = response;
 };
 
 // TODO: make an issue on Honos Github so this might get fixed in the future

@@ -1,7 +1,7 @@
 import { IdQuery } from "../../middleware/mediator/simple-event-payloads";
 import { handleInventoryCreatures } from "./event-handlers/inv-creatures-handler";
 
-export interface AllCreaturesResponse {
+export interface CreatureResponse {
   id: number;
   species: string;
   creature_id: string;
@@ -10,7 +10,7 @@ export interface AllCreaturesResponse {
 
 // Collections to export all events / handlers
 export type InventoryEvents = {
-  "inventory:creatures": IdQuery<AllCreaturesResponse[]>;
+  "inventory:creatures": IdQuery<CreatureResponse[]>;
 };
 
 export const inventoryHandlers = {

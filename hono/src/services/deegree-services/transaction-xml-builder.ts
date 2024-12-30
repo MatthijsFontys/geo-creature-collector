@@ -12,12 +12,13 @@ export class TransactionXMLBuilder extends XMLBuilderImpl {
       version: "2.0.0",
       "xmlns:wfs": "http://www.opengis.net/wfs/2.0",
       "xmlns:gml": "http://www.opengis.net/gml/3.2",
+      "xmlns:fes": "http://www.opengis.net/fes/2.0",
       "xmlns:app": "http://www.deegree.org/app",
     });
   }
 
   // TODO: pass an object instead, but only once ive figures out the different models for creature
-  insertCreature(position: Position, species: string, isShiny: boolean) {
+  insertCreature(position: Position, species: string, isShiny: boolean): this {
     this.root()
       .ele("wfs:Insert")
       .ele("app:creatures__spawned")
@@ -33,7 +34,21 @@ export class TransactionXMLBuilder extends XMLBuilderImpl {
       .up(/* Close app:species */)
       .ele("app:is_shiny")
       .txt(this.boolToTxt(isShiny));
-    /* Library is smart enough to close all leftover tags */
+    // Library auto closes leftover tags
+
+    return this;
+  }
+
+  deleteCreature(creatureId: string): this {
+    this.root()
+      .ele("wfs:Delete")
+      .att("typeName", "creatures__spawned")
+      .ele("fes:Filter")
+      .ele("fes:ResourceId")
+      .att("rid", creatureId);
+    // Library auto closes leftover tags
+
+    return this;
   }
 
   boolToTxt(value: boolean) {

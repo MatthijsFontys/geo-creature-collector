@@ -18,6 +18,7 @@ export const creaturesCaughtTable = pgTable("creatures__owned", {
   species: varchar({ length: 255 }).notNull(),
   creature_id: varchar({ length: 255 }).unique().notNull(),
   is_shiny: boolean().notNull(),
+  // Octo: Future
   // User Id
   // Traded or w/e
   // OwnerId

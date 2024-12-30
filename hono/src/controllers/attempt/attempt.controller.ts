@@ -8,12 +8,13 @@ import {
   emitMediatorAsync,
   getMediatorResponse,
 } from "../../middleware/mediator/mediator-middleware";
+import { CatchResultView } from "./attempt.models";
 
 const controller = new OpenAPIHono<AppEnv>();
 
 /* POST: /api/v1/attempt/catch */
 controller.openapi(postAttemptCatch, async (c) => {
-  const body = await c.req.json();
+  const body = c.req.valid("json");
   const creatureId: string = body.creatureId;
   const coordinates: Position = body.coordinates;
 
@@ -22,15 +23,14 @@ controller.openapi(postAttemptCatch, async (c) => {
   const result = getMediatorResponse(query);
 
   if (result.inRange) {
-    return c.json(
-      {
-        code: HttpStatusCode.Created,
-        message: "Pokemon Caught!",
-        isShiny: result.creature.properties.is_shiny,
-        species: result.creature.properties.species,
-      },
-      HttpStatusCode.Created
-    );
+    const code = HttpStatusCode.Created;
+    const view: CatchResultView = {
+      code,
+      message: "Pokemon Caught!",
+      isShiny: result.isShiny!,
+      species: result.species!,
+    };
+    return c.json(view, code);
   } else
     return c.json(
       {

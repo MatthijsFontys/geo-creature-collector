@@ -1,0 +1,38 @@
+meta {
+  name: DeSpawn Creature
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:9001/deegree/services/CreatureWfs?service=WFS&version=2.0.0&request=Transaction
+  body: xml
+  auth: basic
+}
+
+query {
+  service: WFS
+  version: 2.0.0
+  request: Transaction
+}
+
+auth:basic {
+  username: bruno
+  password: l0Ocal-dev
+}
+
+body:xml {
+  <?xml version="1.0" encoding="UTF-8"?>
+  <wfs:Transaction 
+      service="WFS" 
+      version="2.0.0" 
+      xmlns:wfs="http://www.opengis.net/wfs/2.0" 
+      xmlns:fes="http://www.opengis.net/fes/2.0"
+      xmlns:app="http://www.deegree.org/app">
+      <wfs:Delete typeName="app:creatures__spawned">
+          <fes:Filter>
+              <fes:ResourceId rid="APP_CREATURES__SPAWNED_69"/>
+          </fes:Filter>
+      </wfs:Delete>
+  </wfs:Transaction>
+}

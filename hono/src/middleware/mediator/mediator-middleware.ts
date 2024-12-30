@@ -17,6 +17,12 @@ export const availableHandlers = defineHandlers<AvailableEvents, AppEnvWeak>({
   ...inventoryHandlers,
 });
 
+/** Utility type to help create response types from the corresponding view types */
+export type InferResponseFromView<TviewModel> = Omit<
+  TviewModel,
+  "code" | "message"
+>;
+
 //#region Supply mediator result
 export interface HasResponse<T> {
   response?: T;
