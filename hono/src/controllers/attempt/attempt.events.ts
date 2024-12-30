@@ -1,5 +1,6 @@
 import { HasResponse } from "../../middleware/mediator/mediator-middleware";
 import { handleCatchAttempt } from "./event-handlers/attempt-catch-handler";
+import { Position } from "geojson";
 
 // TODO: this obviously should not be here, but with mapping and the deegree api we will deal later
 export interface Creature {
@@ -17,7 +18,7 @@ export interface CatchCreatureResponse {
 
 export interface CatchCreatureQuery extends HasResponse<CatchCreatureResponse> {
   creatureId: string;
-  coordinates: [number, number];
+  coordinates: Position;
 }
 //#endregion
 

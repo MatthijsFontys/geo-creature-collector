@@ -52,5 +52,5 @@ const _handleCatchAttempt = async (
 // TODO: make an issue on Honos Github so this might get fixed in the future
 // TODO: make an issue on my github, to remind me about bugs in third party libraries
 /* Example of how to make a handler with a strong Context<AppEnv>, it doesn't matter if it gets exported as weak,
- * because the inner handling uses the strong env, and the strong env is always gets passed, but Hono's middleware does not know that   */
+ * because the inner handling uses the strong env, and the strong env is always gets passed, but Hono's middleware does not know that  */
 export const handleCatchAttempt = toWeakEnv(_handleCatchAttempt);

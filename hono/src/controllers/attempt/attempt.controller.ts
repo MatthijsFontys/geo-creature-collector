@@ -3,6 +3,7 @@ import { HttpStatusCode } from "axios";
 import { postAttemptCatch } from "./attempt.routes";
 import { AppEnv } from "../../middleware/app-environment";
 import { CatchCreatureQuery } from "./attempt.events";
+import { Position } from "geojson";
 import {
   emitMediatorAsync,
   getMediatorResponse,
@@ -14,7 +15,7 @@ const controller = new OpenAPIHono<AppEnv>();
 controller.openapi(postAttemptCatch, async (c) => {
   const body = await c.req.json();
   const creatureId: string = body.creatureId;
-  const coordinates: [number, number] = body.coordinates;
+  const coordinates: Position = body.coordinates;
 
   const query: CatchCreatureQuery = { creatureId, coordinates };
   await emitMediatorAsync(c, "attempt:catch", query);
