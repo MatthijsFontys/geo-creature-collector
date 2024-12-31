@@ -5,7 +5,9 @@ import { BunWebSocketData } from "hono/dist/types/adapter/bun/websocket";
 import { AppEnv } from "./middleware/app-environment";
 import { DeegreeCommandClient } from "./services/deegree-services/deegree-command-client";
 import { DeegreeQueryClient } from "./services/deegree-services/deegree-query-client";
-import { HttpStatusCode } from "axios";
+import axios, { HttpStatusCode } from "axios";
+import sharp = require("sharp");
+import { getMime } from "./utils/mime-types";
 
 let websocket: WebSocketHandler<BunWebSocketData>;
 const app = new OpenAPIHono<AppEnv>().basePath("/api/v1");
@@ -58,6 +60,33 @@ app.get("test/deegree/creaturesForPlayer", async (c) => {
   );
   return c.json(result.data, HttpStatusCode.Ok);
 });
+
+app.get("test/imgmanip/:z/:x/:y", async (c) => {
+  const response = await axios({
+    method: "get",
+    url: `https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:28992/${c.req.param(
+      "z"
+    )}/${c.req.param("x")}/${c.req.param("y")}.png`,
+    responseType: "arraybuffer", // Necessary to handle image binary data
+  });
+
+  const imageBuffer = Buffer.from(response.data);
+
+  let b = await sharp(imageBuffer /*"src/tile.png"*/)
+    .negate({ alpha: false })
+    .grayscale()
+    .normalise()
+    .modulate({ brightness: 0.8 })
+    // .png()
+    .toBuffer();
+
+  return new Response(b, {
+    headers: {
+      "Content-Type": getMime("png"),
+    },
+  });
+});
+
 //#endregion
 
 export default {
