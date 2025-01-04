@@ -12,7 +12,7 @@ const app = new OpenAPIHono<AppEnv>().basePath("/api/v1");
 const setup = new AppSetup(app);
 setup
   .provideSimpleMiddleware()
-  .addSimpleHeartbeat()
+  .addHeartbeats()
   .setupMediator()
   .routeControllers()
   .addWebsockets((ws) => (websocket = ws))

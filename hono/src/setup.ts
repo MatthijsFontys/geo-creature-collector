@@ -9,6 +9,9 @@ import { AppEnv } from "./middleware/app-environment";
 import inventoryController from "./controllers/inventory/inventory.controller";
 import { emitter } from "@hono/event-emitter";
 import { availableHandlers } from "./middleware/mediator/mediator-middleware";
+import heartbeatController, {
+  HONO_HEARTBEAT_TEXT,
+} from "./controllers/heartbeat/heartbeat.controller";
 
 export class AppSetup {
   constructor(private readonly _app: OpenAPIHono<AppEnv>) {}
@@ -18,10 +21,11 @@ export class AppSetup {
     return this;
   }
 
-  addSimpleHeartbeat(): this {
+  addHeartbeats(): this {
     this._app.get("/", (c) => {
-      return c.text("🟢 The Hono powered API is: AVAILABLE 🔥");
+      return c.text(HONO_HEARTBEAT_TEXT, 200);
     });
+    this._app.route("/heartbeat", heartbeatController);
     return this;
   }
 

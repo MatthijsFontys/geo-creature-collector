@@ -1,0 +1,24 @@
+meta {
+  name: Deegree
+  type: http
+  seq: 3
+}
+
+get {
+  url: https://geocreature.duckdns.org/deegree/services/CreatureWfs?service=WFS&version=2.0.0&outputformat=application/geo%2Bjson&request=GetFeature&typeNames=app:creatures__spawned
+  body: none
+  auth: basic
+}
+
+query {
+  service: WFS
+  version: 2.0.0
+  outputformat: application/geo%2Bjson
+  request: GetFeature
+  typeNames: app:creatures__spawned
+}
+
+auth:basic {
+  username: bruno
+  password: Tach1ban@Kan4de
+}

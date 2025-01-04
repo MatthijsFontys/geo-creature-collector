@@ -1,6 +1,9 @@
 # Make it easy for devs to ignore local util files
 *ignore-me*
 
+# Keepass databases
+*.kdbx
+
 ####################################################################
 ## GITIGNORE IO template below for IDEs' and operatings systems  ###
 ####################################################################
