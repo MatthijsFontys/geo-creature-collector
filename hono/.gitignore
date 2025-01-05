@@ -1,6 +1,9 @@
 # deps
 node_modules/
 
+# tembo postgis ssl certificate
+tembo.crt
+
 # dotenv
 .env
 .env.*

@@ -1,8 +1,8 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { AppEnv } from "../../middleware/app-environment";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { db } from "../../db/db";
-import { creaturesCaughtTable } from "../../db/db.schema";
+import { sql } from "drizzle-orm";
 
 export const HONO_HEARTBEAT_TEXT = "🟢 The Hono powered API is: AVAILABLE 🔥";
 
@@ -19,17 +19,33 @@ controller.get("/deegree", async (c) => {
     await axios.get(process.env.GEO_URL);
     return c.text("🟢 Deegree is: AVAILABLE 🌍", 200);
   } catch (error) {
-    return c.text("🔴 Deegree is: UNAVAILABLE 😓", 500);
+    logHeartbeatError("POSTGIS", error);
+    return c.text(
+      "🔴 Deegree is: UNAVAILABLE 😓",
+      HttpStatusCode.ServiceUnavailable
+    );
   }
 });
 
 controller.get("/database", async (c) => {
   try {
-    await db.select().from(creaturesCaughtTable).limit(0);
-    return c.text("🟢 PostGis is: AVAILABLE 🐘");
+    await db.execute(sql`SELECT 1`);
+    return c.text("🟢 PostGis is: AVAILABLE 🐘", 200);
   } catch (error) {
-    return c.text("🔴 PostGis is: UNAVAILABLE 😓", 500);
+    logHeartbeatError("POSTGIS", error);
+    return c.text(
+      "🔴 PostGis is: UNAVAILABLE 😓",
+      HttpStatusCode.ServiceUnavailable
+    );
   }
 });
+
+function logHeartbeatError(service: string, error: unknown) {
+  const header = `########## ${service} HEARTBEAT ERROR ##########`;
+  const footer = "#".repeat(header.length);
+  console.log(header);
+  console.log(error);
+  console.log(footer);
+}
 
 export default controller;
