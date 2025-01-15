@@ -1,7 +1,102 @@
 {
-  "creatures": [
-    {"name": "Articuno"},
-    {"name": "Zapdos"},
-    {"name": "Moltres"}
-  ]
+  "inventory": {
+    "creatures": [
+      {
+        "name": "azurill"
+      },
+      {
+        "name": "diglet"
+      },
+      {
+        "name": "hoppip"
+      },
+      {
+        "name": "meowth"
+      },
+      {
+        "name": "pig"
+      },
+      {
+        "name": "slugma"
+      },
+      {
+        "name": "voltorb"
+      },
+      {
+        "name": "bulbasaur"
+      },
+      {
+        "name": "dugtrio"
+      },
+      {
+        "name": "jigglypuff"
+      },
+      {
+        "name": "nidoran_f"
+      },
+      {
+        "name": "pikachu"
+      },
+      {
+        "name": "snuggle"
+      },
+      {
+        "name": "weedle"
+      },
+      {
+        "name": "caterpie"
+      },
+      {
+        "name": "eevee"
+      },
+      {
+        "name": "magikarp"
+      },
+      {
+        "name": "nidoran_m"
+      },
+      {
+        "name": "rattata"
+      },
+      {
+        "name": "spheal"
+      },
+      {
+        "name": "wigglytuff"
+      },
+      {
+        "name": "charmander"
+      },
+      {
+        "name": "gastly"
+      },
+      {
+        "name": "magnemite"
+      },
+      {
+        "name": "oddish"
+      },
+      {
+        "name": "seedot"
+      },
+      {
+        "name": "squirtle"
+      },
+      {
+        "name": "cleffa"
+      },
+      {
+        "name": "maril"
+      },
+      {
+        "name": "pichu"
+      },
+      {
+        "name": "skitty"
+      },
+      {
+        "name": "togepi"
+      }
+    ]
+  }
 }
