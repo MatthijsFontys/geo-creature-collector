@@ -1,0 +1,17 @@
+meta {
+  name: Get helmond weather
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://api.weatherapi.com/v1/current.json?key=c2573102cdc942019a6100639242011&q=Helmond&aqi=no
+  body: none
+  auth: none
+}
+
+query {
+  key: c2573102cdc942019a6100639242011
+  q: Helmond
+  aqi: no
+}
