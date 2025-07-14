@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@hono/event-emitter": "^2.0.0",
-    "@hono/zod-openapi": "^0.18.3",
+    "@hono/zod-openapi": "^0.19.10",
     "@turf/turf": "^7.2.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
