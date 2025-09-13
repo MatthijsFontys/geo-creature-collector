@@ -8,7 +8,7 @@
     "@hono/event-emitter": "^2.0.0",
     "@hono/zod-openapi": "^0.18.3",
     "@turf/turf": "^7.2.0",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.3",
     "hono": "^4.6.14",
@@ -23,7 +23,7 @@
     "@types/bun": "latest",
     "@types/geojson": "^7946.0.15",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.30.1",
+    "drizzle-kit": "^0.31.4",
     "json-server": "^1.0.0-beta.3"
   }
 }
