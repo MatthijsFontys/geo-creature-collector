@@ -1,0 +1,10 @@
+{
+	"always": [{"creatures": [
+		{"name": "Onix"},
+		{"name": "Geodude"},
+		{"name": "Zubat"},
+		{"name": "Cubone"},
+		{"name": "Kabuto"},
+		{"name": "Rhyhorn"}
+	]}]
+}

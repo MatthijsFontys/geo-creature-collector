@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "spawner",
+  "title": "Spawner",
+  "description": "A region on the map that can spawn creatures to be caught",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "always": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reward" }
+    },
+    "some": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ruleGroup" }
+    },
+    "every": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ruleGroup" }
+    }
+  },
+  "$defs": {
+    "creature": {
+      "description": "A single creature that can be spawned as a reward.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/creatureEnum"
+        },
+        "spawnRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "disableShiny": {
+          "$comment": "Set to true to disable shiny spawns for this creature.",
+          "type": "boolean",
+          "default": false
+        },
+        "shinyRate": {
+          "$comment": "The given number is how often a shiny creature will spawn. 8192 is 1/8192, 1024 is 1/1024, etc.",
+          "type": "number",
+          "minimum": 1
+        },
+        "minLvl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "maxLvl": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": ["name"]
+    },
+    "reward": {
+      "type": "object",
+      "properties": {
+        "priority": {
+          "type": "integer",
+          "default": 0
+        },
+        "creatures": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/creature" },
+          "minItems": 0
+        }
+      },
+      "required": ["creatures"]
+    },
+    "rule": {
+      "description": "A rule specifying a condition for spawning.",
+      "type": "object",
+      "properties": {
+        "namespace": {
+          "$ref": "#/$defs/namespaceEnum"
+        },
+        "name": {
+          "type": "string"
+        },
+        "values": {
+          "type": "array",
+          "items": { 
+            "type": "string",
+            "pattern": "^(-?\\d+|[a-zA-Z]+)$",
+            "$comment": "Either a string number (can be negative) or a string (letters only, capitals allowed)"
+          }
+        },
+        "operator": {
+          "enum": ["<", "<=", ">", ">=", "==", "!="],
+          "default": "=="
+        }
+      },
+      "required": ["namespace", "name", "operator"]
+    },
+    "ruleGroup": {
+      "description": "A group of rules and an associated reward, used for conditional spawns.",
+      "type": "object",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/rule" }
+        },
+        "reward": { "$ref": "#/$defs/reward" }
+      },
+      "required": ["rules", "reward"]
+    },
+    "creatureEnum": {
+      "description": "Enumeration of all possible creature names that can be spawned.",
+      "enum": ["Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard", "Squirtle", "Wartortle", "Blastoise", "Caterpie", "Metapod", "Butterfree", "Weedle", "Kakuna", "Beedrill", "Pidgey", "Pidgeotto", "Pidgeot", "Rattata", "Raticate", "Spearow", "Fearow", "Ekans", "Arbok", "Pikachu", "Raichu", "Sandshrew", "Sandslash", "Nidoran(F)", "Nidorina", "Nidoqueen", "Nidoran(M)", "Nidorino", "Nidoking", "Clefairy", "Clefable", "Vulpix", "Ninetales", "Jigglypuff", "Wigglytuff", "Zubat", "Golbat", "Oddish", "Gloom", "Vileplume", "Paras", "Parasect", "Venonat", "Venomoth", "Diglett", "Dugtrio", "Meowth", "Persian", "Psyduck", "Golduck", "Mankey", "Primeape", "Growlithe", "Arcanine", "Poliwag", "Poliwhirl", "Poliwrath", "Abra", "Kadabra", "Alakazam", "Machop", "Machoke", "Machamp", "Bellsprout", "Weepinbell", "Victreebel", "Tentacool", "Tentacruel", "Geodude", "Graveler", "Golem", "Ponyta", "Rapidash", "Slowpoke", "Slowbro", "Magnemite", "Magneton", "Farfetch'd", "Doduo", "Dodrio", "Seel", "Dewgong", "Grimer", "Muk", "Shellder", "Cloyster", "Gastly", "Haunter", "Gengar", "Onix", "Drowzee", "Hypno", "Krabby", "Kingler", "Voltorb", "Electrode", "Exeggcute", "Exeggutor", "Cubone", "Marowak", "Hitmonlee", "Hitmonchan", "Lickitung", "Koffing", "Weezing", "Rhyhorn", "Rhydon", "Chansey", "Tangela", "Kangaskhan", "Horsea", "Seadra", "Goldeen", "Seaking", "Staryu", "Starmie", "Mr. Mime", "Scyther", "Jynx", "Electabuzz", "Magmar", "Pinsir", "Tauros", "Magikarp", "Gyarados", "Lapras", "Ditto", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Porygon", "Omanyte", "Omastar", "Kabuto", "Kabutops", "Aerodactyl", "Snorlax", "Articuno", "Zapdos", "Moltres", "Dratini", "Dragonair", "Dragonite", "Mewtwo", "Mew"]
+    },
+    "namespaceEnum": {
+      "description": "Enumeration of all possible rule namespaces (contexts in which rules apply).",
+      "enum": ["weather", "time"]
+    }
+  }
+}

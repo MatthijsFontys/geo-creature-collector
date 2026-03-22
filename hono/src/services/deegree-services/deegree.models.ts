@@ -1,6 +1,7 @@
 export interface SpawnerGeoProps {
-  name: string;
-  creatures: string;
+  id: number;
+  jsonUrl: string;
+  kind: string;
 }
 
 export interface CreatureGeoProps {

@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://www.deegree.org/datasource/feature/shape ./deegree_data/schemas/shape.xsd">
 
   <!-- [0...1] CRS for storing geometries -->
-  <StorageCRS>EPSG:28992</StorageCRS>
+  <StorageCRS>EPSG:4326</StorageCRS>
 
   <!-- [0...1] Local name of the feature type (defaults to base name of shape file) -->
   <FeatureTypeName>Spawners</FeatureTypeName>

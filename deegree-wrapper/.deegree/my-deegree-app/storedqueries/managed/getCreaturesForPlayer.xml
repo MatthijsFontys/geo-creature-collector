@@ -13,7 +13,7 @@
 	  <Filter xmlns="http://www.opengis.net/fes/2.0">
 		<DWithin>
 		  <ValueReference>geometry</ValueReference>
-			<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2" srsName="EPSG:28992">
+			<gml:Point xmlns:gml="http://www.opengis.net/gml/3.2" srsName="EPSG:4326">
 				<gml:coordinates>${playerLocation}</gml:coordinates>
 			</gml:Point>
 			<fes:Distance uom="http://www.opengis.net/def/uom/OGC/1.0/meter">100</fes:Distance> <!-- Explicit meter -->

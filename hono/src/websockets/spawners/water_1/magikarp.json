@@ -1,0 +1,27 @@
+{
+  "always": [
+    {
+      "creatures": [
+        {
+          "name": "Magikarp"
+        },
+        {
+          "name": "Lapras"
+        },
+        {
+          "name": "Horsea"
+        },
+        {
+          "name": "Tentacool"
+        },
+		{
+		  "name": "Staryu"
+		},
+		{
+		  "name": "Goldeen"
+		}
+		
+      ]
+    }
+  ]
+}

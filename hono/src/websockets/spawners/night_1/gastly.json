@@ -1,0 +1,23 @@
+{
+  "every": [
+    {
+      "rules": [
+        {
+          "namespace": "time",
+          "name": "daySegment",
+          "operator": ">",
+          "values": [
+            "afternoon"
+          ]
+        }
+      ],
+      "reward": {
+        "creatures": [
+          {
+            "name": "Gastly"
+          }
+        ]
+      }
+    }
+  ]
+}

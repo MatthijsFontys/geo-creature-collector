@@ -1,0 +1,25 @@
+{
+	"always": [{
+		"creatures": [
+			{"name": "Machop"},
+			{"name": "Mankey"}
+		]}
+	],
+	"some": [
+	  {
+			"rules": [{"namespace": "time", "name": "daySegment", "operator": "==", "values": ["morning"]}],
+			"reward": {"creatures": [{"name": "Hitmonchan"}]}
+		},
+	  {
+			"rules": [{"namespace": "time", "name": "daySegment", "operator": "==", "values": ["afternoon"]}],
+			"reward": {"creatures": [{"name": "Hitmonlee"}]}
+		},
+		{
+			"rules": [
+				{"namespace": "time", "name": "daySegment", "operator": "==", "values": ["evening"]},
+				{"namespace": "time", "name": "daySegment", "operator": "==", "values": ["night"]}
+			],
+			"reward": {"creatures": [{"name": "Gastly"}]}
+		}
+	]
+}

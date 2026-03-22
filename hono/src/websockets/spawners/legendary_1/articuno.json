@@ -1,0 +1,20 @@
+{
+	"every": [
+	  {
+			"rules": [{"namespace": "time", "name": "season", "operator": "==", "values": ["winter"]}],
+			"reward": {"creatures": [{"name": "Articuno"}]}
+		},
+	  {
+			"rules": [{"namespace": "time", "name": "season", "operator": "==", "values": ["summer"]}],
+			"reward": {"creatures": [{"name": "Moltres"}]}
+		},
+		{
+			"rules": [{"namespace": "time", "name": "season", "operator": "==", "values": ["fall"]}],
+			"reward": {"creatures": [{"name": "Zapdos"}]}
+		},
+		{
+			"rules": [{"namespace": "time", "name": "season", "operator": "==", "values": ["spring"]}],
+			"reward": {"creatures": [{"name": "Mewtwo"}]}
+		}
+	]
+}

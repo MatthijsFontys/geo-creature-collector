@@ -6,6 +6,9 @@ import { AppEnv } from "./middleware/app-environment";
 import { DeegreeCommandClient } from "./services/deegree-services/deegree-command-client";
 import { DeegreeQueryClient } from "./services/deegree-services/deegree-query-client";
 import { HttpStatusCode } from "axios";
+import pinoLogger from "./middleware/logger";
+
+pinoLogger.info('🔥 Starting Hono');
 
 let websocket: WebSocketHandler<BunWebSocketData>;
 const app = new OpenAPIHono<AppEnv>().basePath("/api/v1");

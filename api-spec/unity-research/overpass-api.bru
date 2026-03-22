@@ -1,0 +1,15 @@
+meta {
+  name: overpass-api
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://overpass-api.de/api/interpreter?data=[out:json];(way["building"](52.5194,13.4067,52.5210,13.4094);>;);out body;
+  body: none
+  auth: none
+}
+
+query {
+  data: [out:json];(way["building"](52.5194,13.4067,52.5210,13.4094);>;);out body;
+}

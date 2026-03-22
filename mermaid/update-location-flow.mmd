@@ -1,0 +1,12 @@
+---
+title: Updating geolocation with server flow
+config:
+---
+flowchart TD
+        A("Start") --> Wait["Wait N seconds"]
+        Wait --> UpdateLoc["Send updated location to server"]
+        UpdateLoc --> UpdateSpawner["Get and notify spawner"]
+        UpdateSpawner --> SpawnCreatures["Possibly Spawn New Creatures"]
+        SpawnCreatures--> GetNearbyCreatures["Get Nearby Creatures"] 
+        GetNearbyCreatures --> SendNearbyCreatures["Send nearby creatures back to client"]
+        SendNearbyCreatures --> Wait & Z("End")

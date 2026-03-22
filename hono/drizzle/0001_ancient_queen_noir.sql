@@ -5,5 +5,5 @@
 /* IMPORTANT also refresh or restart deegree so it can see the changes in the database */
 
 ALTER TABLE creatures__spawned
-ALTER COLUMN geometry TYPE geometry(Point, 28992)
-USING ST_SetSRID(geometry, 28992);
+ALTER COLUMN geometry TYPE geometry(Point, 4326)
+USING ST_SetSRID(geometry, 4326);

@@ -1,21 +1,28 @@
 {
   "name": "hono",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "start": "bun run dev",
+    "dev": "bun run --hot src/index.ts | pino-pretty --colorize",
     "dev:jsonserver": "npx json-server ./json-server/db.json -s ./json-server/public --watch --routes ./json-server/routes.json --port 9002",
-    "prod": "bun run src/index.ts"
+    "prod": "bun run src/index.ts",
+    "test": "vitest"
   },
   "dependencies": {
     "@hono/event-emitter": "^2.0.0",
     "@hono/zod-openapi": "^0.18.3",
     "@turf/turf": "^7.2.0",
+    "@types/proj4": "^2.5.6",
+    "ajv": "^8.17.1",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.3",
     "hono": "^4.6.14",
     "mime": "^4.0.6",
     "pg": "^8.13.1",
-    "purify-ts": "^2.1.1",
+    "pino": "^9.6.0",
+    "proj4": "^2.15.0",
+    "purify-ts": "2.1.0",
+    "random-js": "^2.1.0",
     "xmlbuilder2": "^3.1.1",
     "xmldom-ts": "^0.3.1",
     "xpath": "^0.0.34",
@@ -23,9 +30,11 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/geojson": "^7946.0.15",
+    "@types/geojson": "^7946.0.16",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.19.1",
-    "json-server": "v0.17.4"
+    "drizzle-kit": "^0.31.0",
+    "json-server": "v0.17.4",
+    "pino-pretty": "^13.0.0",
+    "vitest": "^3.1.2"
   }
 }

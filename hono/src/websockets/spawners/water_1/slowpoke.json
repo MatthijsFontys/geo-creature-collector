@@ -1,0 +1,20 @@
+{
+  "always": [
+    {
+      "creatures": [
+        {
+          "name": "Slowpoke"
+        },
+        {
+          "name": "Psyduck"
+        },
+        {
+          "name": "Poliwag"
+        },
+        {
+          "name": "Seel"
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,7 @@
   
   <FeatureStoreId>Spawners</FeatureStoreId>
   
-  <QueryCRS>EPSG:28992</QueryCRS>
+  <QueryCRS>EPSG:4326</QueryCRS>
   
   <GeoJSONFormat allowOtherCrsThanWGS84="true">
 	<MimeType>application/json</MimeType>

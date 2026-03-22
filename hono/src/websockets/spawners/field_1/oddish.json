@@ -1,0 +1,9 @@
+{
+	"always": [{"creatures": [
+		{"name": "Oddish"},
+		{"name": "Vulpix"},
+		{"name": "Caterpie"},
+		{"name": "Exeggcute"},
+		{"name": "Doduo"}
+	]}]
+}

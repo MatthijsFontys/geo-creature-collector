@@ -13,7 +13,7 @@
       <Filter xmlns="http://www.opengis.net/fes/2.0">
 	    <Contains>
 		  <ValueReference>geometry</ValueReference>
-          <gml:Point srsName="EPSG:28992">
+          <gml:Point srsName="EPSG:4326">
             <gml:coordinates>${playerLocation}</gml:coordinates>
           </gml:Point>
 		</Contains>

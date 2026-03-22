@@ -12,6 +12,9 @@ import { availableHandlers } from "./middleware/mediator/mediator-middleware";
 import heartbeatController, {
   HONO_HEARTBEAT_TEXT,
 } from "./controllers/heartbeat/heartbeat.controller";
+import { Point } from "geojson";
+import { spawnSpawnerResults } from "./websockets/subscribers/spawner-sub";
+import { point } from "@turf/helpers";
 
 export class AppSetup {
   constructor(private readonly _app: OpenAPIHono<AppEnv>) {}
@@ -47,9 +50,16 @@ export class AppSetup {
       "/ws",
       upgradeWebSocket(() => {
         return {
-          onMessage: (event, ws) => {
-            console.log(event.data);
-            ws.send("Heya to you too");
+          onMessage: async (event, ws) => {
+            const data = JSON.parse(event.data.toString());
+            if (data?.length === 2 && typeof data[0] === "number" && typeof data[1] === "number") {
+              const playerPosition: Point = point([data[0], data[1]]).geometry;
+              ws.send("Accepted coordinates");
+              await spawnSpawnerResults(playerPosition);
+              ws.send("Spawns processed");
+            } else {
+              ws.send("Invalid coordinate");
+            }
           },
         };
       })

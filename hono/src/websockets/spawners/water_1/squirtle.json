@@ -1,0 +1,20 @@
+{
+  "always": [
+    {
+      "creatures": [
+        {
+          "name": "Squirtle"
+        },
+        {
+          "name": "Krabby"
+        },
+        {
+          "name": "Shellder"
+        },
+        {
+          "name": "Tentacool"
+        }
+      ]
+    }
+  ]
+}

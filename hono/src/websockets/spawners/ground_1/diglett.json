@@ -1,0 +1,43 @@
+{
+  "always": [
+	  {
+			"creatures": [
+        { "name": "Diglett" },
+        { "name": "Sandshrew" }
+	  ]}
+	],
+  "some": [
+    {
+      "rules": [
+        { "namespace": "time", "name": "season", "operator": "==", "values": ["summer"] },
+        { "namespace": "time", "name": "season", "operator": "==", "values": ["winter"] }
+      ],
+      "reward": {
+        "creatures": [
+          { "name": "Aerodactyl" }
+        ]
+      }
+    },
+    {
+      "rules": [
+        { "namespace": "time", "name": "season", "operator": "==", "values": ["fall"] },
+        { "namespace": "time", "name": "season", "operator": "==", "values": ["spring"] }
+      ],
+      "reward": {
+        "creatures": [
+          { "name": "Omanyte" }
+        ]
+      }
+    },
+    {
+      "rules": [
+        { "namespace": "time", "name": "daySegment", "operator": "==", "values": ["earlyMorning"] }
+      ],
+      "reward": {
+        "creatures": [
+          { "name": "Snorlax" }
+        ]
+      }
+    }
+  ]
+}

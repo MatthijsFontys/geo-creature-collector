@@ -1,0 +1,73 @@
+## Voxel-Based OSM Game Pipeline (Unity)
+
+### Preprocessing (Done Ahead of Time)
+1. **Extract Raw OSM Data**
+   - Download OpenStreetMap PBF extract for desired region (e.g. Netherlands).
+   - Tools: [Geofabrik](https://download.geofabrik.de/)
+
+2. **Filter with Overpass**
+   - Use Overpass API or Overpass Turbo to filter relevant data.
+   - Example: only roads, parks, waterways, buildings.
+
+3. **Convert to Clean JSON Format**
+   - Format as a lightweight, trimmed-down JSON tailored for game use.
+   - Structure it per tile or grid section (e.g. 250m x 250m cells).
+
+4. **Store JSON in Online Storage**
+   - Host on CDN, Firebase, S3, etc.
+   - Client will download only relevant nearby tiles.
+
+---
+
+### ⚡ Real-Time Pipeline (On Device)
+5. **Download JSON Data for Nearby Grid**
+   - Based on player position.
+   - Asynchronously fetch only needed areas.
+
+6. **Parse and Convert to Voxel Grid**
+   - Create in-memory voxel grid from JSON (buildings, terrain, roads).
+   - Optional: use ECS/DOTS for performance.
+
+7. **Apply Tile Variation (Autotiling)**
+   - Use neighborhood bitmask to select tile variant (e.g., water edge, grass corner).
+   - Decorate with procedural details (trees, props, flowers).
+
+8. **Render with Prefabs / Meshes**
+   - Spawn prefabs or draw combined meshes.
+   - Handle loading/unloading based on player movement.
+
+---
+
+## Tile Variation (Autotiling for Voxels)
+
+### ��� What to Research / Implement
+
+#### 1. **Bitmasking for Tile Selection**
+   - Study 2D autotiling bitmask rules (e.g. 8-bit for 3x3 neighborhood).
+   - Apply to 3D terrain layers (top-down mostly).
+   - Example Resources:
+     - [Autotiling - GameDevWiki](https://gamedevelopment.tutsplus.com/series/constructing-a-tile-based-autotiling-system--cms-873)
+     - [Bitmasking Explanation (Unity Forum)](https://forum.unity.com/threads/bitmasking-autotile-explanation.726902/)
+
+#### 2. **Procedural Prop Placement**
+   - Add random props (trees, bushes) based on noise or rules.
+   - Perlin noise or blue noise sampling = good starting point.
+
+#### 3. **Voxel Asset Variation**
+   - Define multiple prefab variants for a voxel type.
+   - Select based on rules or randomness.
+
+#### 4. **Tile Decoration Rules**
+   - Think in terms of "biomes" or "context":
+     - Forest grass tile = chance for mushrooms.
+     - Near-water tile = reeds.
+     - Inner-city tile = manhole or trash can.
+
+---
+
+## Optional Tools to Explore
+- Unity Tilemaps (for logic reuse)
+- ScriptableObjects for tile metadata
+- Custom shaders for variation
+- ECS for massive grid handling
+

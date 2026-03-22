@@ -1,0 +1,20 @@
+---
+title: Catching a Pokémon Flowchart
+---
+
+%% Example flowchart
+flowchart TD
+    A[Encounter Pokémon] --> B{Throw Pokéball?}
+    B -->|Yes| C[Pokéball thrown]
+    C --> D{Is Pokémon caught?}
+    D -->|Yes| E[Success! Pokémon caught]
+    D -->|No| F{Try again?}
+    F -->|Yes| B
+    F -->|No| G[Pokémon flees]
+    B -->|No| G
+
+
+%% TODO: Flowcharts to make 
+%% - Updating your location
+%% - Catching a creature
+%% - Spawning creatures

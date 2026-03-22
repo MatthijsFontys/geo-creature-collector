@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixelmon Model Viewer</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23fff' stroke='%23000' stroke-width='4'/%3E%3Cpath d='M2 32a30 30 0 0 1 60 0' fill='%232d5be7'/%3E%3Crect x='10' y='28' width='44' height='8' rx='4' fill='%23e53935'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23fff' stroke='%23000' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%232d5be7' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E">
+  <style>
+    body, html {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Roboto', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      width: 100vw;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    input[type="text"] {
+      z-index: 100;
+      box-sizing: border-box;
+      background: #232323;
+      position: relative;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 1.1rem;
+      color: #e0e0e0;
+      width: 100%;
+      outline: none;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+    
+    input[type="text"]:focus {
+      border: 2px solid #bb86fc;
+      box-shadow: 0 4px 16px 0 rgba(98,0,234,0.12);
+      background: #26243a;
+    }
+
+    .main {
+      display: flex;
+      gap: 16px;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .input-container {
+      position: relative;
+      width: 100%;
+    }
+
+    #autocomplete-list {
+      position: absolute;
+      box-sizing: border-box;
+      left: 0;
+      top: 100%;
+      width: 99%;
+      z-index: 99;
+      background: #232323;
+      border: 1.5px solid #bb86fc;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 6px 24px 0 rgba(0,0,0,0.24);
+      max-height: 260px;
+      overflow-y: auto;
+      transform: translateY(-4px) translateX(.5%);
+    }
+
+    button {
+      width: 75%;
+      background: #6200ea;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #3700b3;
+    }
+
+    .wrapper {
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      position: relative;
+    }
+    #history-bar {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 18px;
+      height: 100px;
+      min-height: 100px;
+      max-width: 100vw;
+      overflow-x: auto;
+      padding: 14px 32px 14px 18px;
+      margin-bottom: 18px;
+      position: relative;
+      background: linear-gradient(90deg, #7c3aed 60%, #a084e8 100%);
+      border-radius: 22px;
+      box-shadow: 0 6px 24px 0 rgba(98,0,234,0.16);
+    }
+    .hidden { display: none !important; }
+    .history-sprite {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: #f3eaff;
+      box-shadow: 0 2px 10px 0 rgba(98,0,234,0.10);
+      border: 2.5px solid #bb86fc;
+      object-fit: contain;
+      margin-right: 6px;
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+      transition: box-shadow 0.2s, border 0.2s;
+      cursor: pointer;
+    }
+    .history-sprite:last-child {
+      border: 2.5px solid #6200ea;
+      box-shadow: 0 0 0 3px #6200ea44;
+    }
+    .history-sprite:hover {
+      border: 2.5px solid #fff;
+      box-shadow: 0 0 0 3px #bb86fc44;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  
+  <img src="https://i.imgur.com/hqxIWI1.png" alt="Pixelmon Model Viewer" style="display:block;margin:0 auto;max-width:700px;width:100%;height:auto;">
+  <div class="wrapper">
+    <div class="main">
+      <div class="input-container">
+        <input type="text" id="pokemonInput" placeholder="Pkmn Name" autocomplete="off">
+        <div id="autocomplete-list"></div>
+      </div>
+      <button onclick="openModel()">Show Model</button>
+    </div>
+    <div class="footer">
+      <div id="history-bar"></div>
+      <span>Models from The Models Resource - Pokémon Quest Section</span>
+    </div>
+  </div>
+
+
+  <script>
+    // Full Pokémon array: { national_dex, pkmn }
+    const pokedex = [
+  { national_dex: 1, pkmn: "Bulbasaur" },
+  { national_dex: 2, pkmn: "Ivysaur" },
+  { national_dex: 3, pkmn: "Venusaur" },
+  { national_dex: 4, pkmn: "Charmander" },
+  { national_dex: 5, pkmn: "Charmeleon" },
+  { national_dex: 6, pkmn: "Charizard" },
+  { national_dex: 7, pkmn: "Squirtle" },
+  { national_dex: 8, pkmn: "Wartortle" },
+  { national_dex: 9, pkmn: "Blastoise" },
+  { national_dex: 10, pkmn: "Caterpie" },
+  { national_dex: 11, pkmn: "Metapod" },
+  { national_dex: 12, pkmn: "Butterfree" },
+  { national_dex: 13, pkmn: "Weedle" },
+  { national_dex: 14, pkmn: "Kakuna" },
+  { national_dex: 15, pkmn: "Beedrill" },
+  { national_dex: 16, pkmn: "Pidgey" },
+  { national_dex: 17, pkmn: "Pidgeotto" },
+  { national_dex: 18, pkmn: "Pidgeot" },
+  { national_dex: 19, pkmn: "Rattata" },
+  { national_dex: 20, pkmn: "Raticate" },
+  { national_dex: 21, pkmn: "Spearow" },
+  { national_dex: 22, pkmn: "Fearow" },
+  { national_dex: 23, pkmn: "Ekans" },
+  { national_dex: 24, pkmn: "Arbok" },
+  { national_dex: 25, pkmn: "Pikachu" },
+  { national_dex: 26, pkmn: "Raichu" },
+  { national_dex: 27, pkmn: "Sandshrew" },
+  { national_dex: 28, pkmn: "Sandslash" },
+  { national_dex: 29, pkmn: "Nidoran(F)" },
+  { national_dex: 30, pkmn: "Nidorina" },
+  { national_dex: 31, pkmn: "Nidoqueen" },
+  { national_dex: 32, pkmn: "Nidoran(M)" },
+  { national_dex: 33, pkmn: "Nidorino" },
+  { national_dex: 34, pkmn: "Nidoking" },
+  { national_dex: 35, pkmn: "Clefairy" },
+  { national_dex: 36, pkmn: "Clefable" },
+  { national_dex: 37, pkmn: "Vulpix" },
+  { national_dex: 38, pkmn: "Ninetales" },
+  { national_dex: 39, pkmn: "Jigglypuff" },
+  { national_dex: 40, pkmn: "Wigglytuff" },
+  { national_dex: 41, pkmn: "Zubat" },
+  { national_dex: 42, pkmn: "Golbat" },
+  { national_dex: 43, pkmn: "Oddish" },
+  { national_dex: 44, pkmn: "Gloom" },
+  { national_dex: 45, pkmn: "Vileplume" },
+  { national_dex: 46, pkmn: "Paras" },
+  { national_dex: 47, pkmn: "Parasect" },
+  { national_dex: 48, pkmn: "Venonat" },
+  { national_dex: 49, pkmn: "Venomoth" },
+  { national_dex: 50, pkmn: "Diglett" },
+  { national_dex: 51, pkmn: "Dugtrio" },
+  { national_dex: 52, pkmn: "Meowth" },
+  { national_dex: 53, pkmn: "Persian" },
+  { national_dex: 54, pkmn: "Psyduck" },
+  { national_dex: 55, pkmn: "Golduck" },
+  { national_dex: 56, pkmn: "Mankey" },
+  { national_dex: 57, pkmn: "Primeape" },
+  { national_dex: 58, pkmn: "Growlithe" },
+  { national_dex: 59, pkmn: "Arcanine" },
+  { national_dex: 60, pkmn: "Poliwag" },
+  { national_dex: 61, pkmn: "Poliwhirl" },
+  { national_dex: 62, pkmn: "Poliwrath" },
+  { national_dex: 63, pkmn: "Abra" },
+  { national_dex: 64, pkmn: "Kadabra" },
+  { national_dex: 65, pkmn: "Alakazam" },
+  { national_dex: 66, pkmn: "Machop" },
+  { national_dex: 67, pkmn: "Machoke" },
+  { national_dex: 68, pkmn: "Machamp" },
+  { national_dex: 69, pkmn: "Bellsprout" },
+  { national_dex: 70, pkmn: "Weepinbell" },
+  { national_dex: 71, pkmn: "Victreebel" },
+  { national_dex: 72, pkmn: "Tentacool" },
+  { national_dex: 73, pkmn: "Tentacruel" },
+  { national_dex: 74, pkmn: "Geodude" },
+  { national_dex: 75, pkmn: "Graveler" },
+  { national_dex: 76, pkmn: "Golem" },
+  { national_dex: 77, pkmn: "Ponyta" },
+  { national_dex: 78, pkmn: "Rapidash" },
+  { national_dex: 79, pkmn: "Slowpoke" },
+  { national_dex: 80, pkmn: "Slowbro" },
+  { national_dex: 81, pkmn: "Magnemite" },
+  { national_dex: 82, pkmn: "Magneton" },
+  { national_dex: 83, pkmn: "Farfetch'd" },
+  { national_dex: 84, pkmn: "Doduo" },
+  { national_dex: 85, pkmn: "Dodrio" },
+  { national_dex: 86, pkmn: "Seel" },
+  { national_dex: 87, pkmn: "Dewgong" },
+  { national_dex: 88, pkmn: "Grimer" },
+  { national_dex: 89, pkmn: "Muk" },
+  { national_dex: 90, pkmn: "Shellder" },
+  { national_dex: 91, pkmn: "Cloyster" },
+  { national_dex: 92, pkmn: "Gastly" },
+  { national_dex: 93, pkmn: "Haunter" },
+  { national_dex: 94, pkmn: "Gengar" },
+  { national_dex: 95, pkmn: "Onix" },
+  { national_dex: 96, pkmn: "Drowzee" },
+  { national_dex: 97, pkmn: "Hypno" },
+  { national_dex: 98, pkmn: "Krabby" },
+  { national_dex: 99, pkmn: "Kingler" },
+  { national_dex: 100, pkmn: "Voltorb" },
+  { national_dex: 101, pkmn: "Electrode" },
+  { national_dex: 102, pkmn: "Exeggcute" },
+  { national_dex: 103, pkmn: "Exeggutor" },
+  { national_dex: 104, pkmn: "Cubone" },
+  { national_dex: 105, pkmn: "Marowak" },
+  { national_dex: 106, pkmn: "Hitmonlee" },
+  { national_dex: 107, pkmn: "Hitmonchan" },
+  { national_dex: 108, pkmn: "Lickitung" },
+  { national_dex: 109, pkmn: "Koffing" },
+  { national_dex: 110, pkmn: "Weezing" },
+  { national_dex: 111, pkmn: "Rhyhorn" },
+  { national_dex: 112, pkmn: "Rhydon" },
+  { national_dex: 113, pkmn: "Chansey" },
+  { national_dex: 114, pkmn: "Tangela" },
+  { national_dex: 115, pkmn: "Kangaskhan" },
+  { national_dex: 116, pkmn: "Horsea" },
+  { national_dex: 117, pkmn: "Seadra" },
+  { national_dex: 118, pkmn: "Goldeen" },
+  { national_dex: 119, pkmn: "Seaking" },
+  { national_dex: 120, pkmn: "Staryu" },
+  { national_dex: 121, pkmn: "Starmie" },
+  { national_dex: 122, pkmn: "Mr. Mime" },
+  { national_dex: 123, pkmn: "Scyther" },
+  { national_dex: 124, pkmn: "Jynx" },
+  { national_dex: 125, pkmn: "Electabuzz" },
+  { national_dex: 126, pkmn: "Magmar" },
+  { national_dex: 127, pkmn: "Pinsir" },
+  { national_dex: 128, pkmn: "Tauros" },
+  { national_dex: 129, pkmn: "Magikarp" },
+  { national_dex: 130, pkmn: "Gyarados" },
+  { national_dex: 131, pkmn: "Lapras" },
+  { national_dex: 132, pkmn: "Ditto" },
+  { national_dex: 133, pkmn: "Eevee" },
+  { national_dex: 134, pkmn: "Vaporeon" },
+  { national_dex: 135, pkmn: "Jolteon" },
+  { national_dex: 136, pkmn: "Flareon" },
+  { national_dex: 137, pkmn: "Porygon" },
+  { national_dex: 138, pkmn: "Omanyte" },
+  { national_dex: 139, pkmn: "Omastar" },
+  { national_dex: 140, pkmn: "Kabuto" },
+  { national_dex: 141, pkmn: "Kabutops" },
+  { national_dex: 142, pkmn: "Aerodactyl" },
+  { national_dex: 143, pkmn: "Snorlax" },
+  { national_dex: 144, pkmn: "Articuno" },
+  { national_dex: 145, pkmn: "Zapdos" },
+  { national_dex: 146, pkmn: "Moltres" },
+  { national_dex: 147, pkmn: "Dratini" },
+  { national_dex: 148, pkmn: "Dragonair" },
+  { national_dex: 149, pkmn: "Dragonite" },
+  { national_dex: 152, pkmn: "Mewtwo" }, // Adjust because models don't line up exactly, some random uploads in the middle
+  { national_dex: 153, pkmn: "Mew" }
+];
+
+    // History bar logic
+    const history = [];
+    function updateHistoryBar() {
+      const bar = document.getElementById('history-bar');
+      bar.innerHTML = '';
+      if (history.length === 0) {
+        bar.classList.add('hidden');
+        return;
+      } else {
+        bar.classList.remove('hidden');
+      }
+      for (let i = Math.max(0, history.length - 15); i < history.length; i++) {
+        const dex = history[i];
+        const img = document.createElement('img');
+        img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${dex}.png`;
+        img.className = 'history-sprite';
+        img.title = pokedex.find(p => p.national_dex === dex)?.pkmn || `#${dex}`;
+        img.alt = img.title;
+        img.addEventListener('click', () => {
+          document.getElementById('pokemonInput').value = img.title;
+          openModel(img.title);
+        });
+        bar.appendChild(img);
+      }
+    }
+
+    function openModel(inputOverride) {
+      const input = (typeof inputOverride === 'string') ? inputOverride.trim() : document.getElementById('pokemonInput').value.trim();
+      let number = parseInt(input, 10);
+      if (isNaN(number)) {
+        // Try to match by name (case-insensitive)
+        const match = pokedex.find(
+          p => p.pkmn.toLowerCase() === input.toLowerCase()
+        );
+        if (match) number = match.national_dex;
+      }
+      if (isNaN(number) || number < 1) {
+        alert('Please enter a valid Pokémon name or number.');
+        return;
+      }
+      // Update history (unique only, move to end if already present)
+      const idx = history.indexOf(number);
+      if (idx !== -1) {
+        history.splice(idx, 1);
+      }
+      const modelId = 25754 + number;
+      if(number > 149) {
+        number = number - 2;
+      }
+      history.push(number);
+      updateHistoryBar();
+      const url = `https://www.models-resource.com/mobile/pokemonquest/model/${modelId}/`;
+      window.open(url, '_blank');
+    }
+    // On load, initialize bar
+    updateHistoryBar();
+
+    // Simple autocomplete
+    const input = document.getElementById('pokemonInput');
+    const autocompleteList = document.getElementById('autocomplete-list');
+    let lastSuggestions = [];
+    input.addEventListener('input', function() {
+      const val = this.value;
+      autocompleteList.innerHTML = '';
+      if (!val) {
+        lastSuggestions = [];
+        return false;
+      }
+      const suggestions = pokedex.filter(p =>
+        p.pkmn.toLowerCase().startsWith(val.toLowerCase()) ||
+        p.national_dex.toString().startsWith(val)
+      );
+      lastSuggestions = suggestions.slice(0, 8);
+      lastSuggestions.forEach(p => {
+        const item = document.createElement('div');
+        const nationalDexNr = p.national_dex > 149 ? p.national_dex - 2 : p.national_dex;
+        item.innerHTML = `<strong>${p.pkmn}</strong> <span style='color:#aaa'>(#${nationalDexNr})</span>`;
+        item.style.background = '#232323';
+        item.style.padding = '6px 10px';
+        item.style.cursor = 'pointer';
+        item.style.transition = 'background 0.16s, color 0.16s, border-left 0.16s';
+        item.addEventListener('mouseenter', function() {
+          item.style.background = '#2a1846';
+          item.style.color = '#bb86fc';
+          item.style.borderLeft = '4px solid #bb86fc';
+        });
+        item.addEventListener('mouseleave', function() {
+          item.style.background = '#232323';
+          item.style.color = '#e0e0e0';
+          item.style.borderLeft = '4px solid transparent';
+        });
+        item.style.borderLeft = '4px solid transparent';
+        item.addEventListener('mousedown', function(e) {
+          input.value = p.pkmn;
+          autocompleteList.innerHTML = '';
+        });
+        autocompleteList.appendChild(item);
+      });
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        if (lastSuggestions.length > 0) {
+          input.value = lastSuggestions[0].pkmn;
+          autocompleteList.innerHTML = '';
+          openModel();
+          e.preventDefault();
+        }
+      }
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target !== input) autocompleteList.innerHTML = '';
+    });
+  </script>
+
+</body>
+</html>

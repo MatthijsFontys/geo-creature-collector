@@ -1,0 +1,20 @@
+{
+	"always": [{
+		"creatures": [
+			{"name": "Pikachu"},
+			{"name": "Eevee"},
+			{"name": "Magnemite"},
+			{"name": "Voltorb"}
+		]}
+	],
+	"some": [
+	  {
+			"rules": [{"namespace": "time", "name": "daySegment", "operator": "<=", "values": ["morning"]}],
+			"reward": {"creatures": [{"name": "Magmar"}]}
+		},
+	  {
+			"rules": [{"namespace": "time", "name": "daySegment", "operator": ">=", "values": ["afternoon"]}],
+			"reward": {"creatures": [{"name": "Electabuzz"}]}
+		}
+	]
+}

@@ -53,6 +53,7 @@ export async function emitMediatorAsync(
 ) {
   const mediator = getMediator(context);
   await mediator.emitAsync(context, key, payload);
+  return payload;
 }
 
 export function emitMediator([context, key, payload]: Parameters<
@@ -60,5 +61,6 @@ export function emitMediator([context, key, payload]: Parameters<
 >) {
   const mediator = getMediator(context);
   mediator.emit(context, key, payload);
+  return payload;
 }
 //#endregion
